@@ -362,6 +362,11 @@ pre code {
     grid-template-columns: 1fr;
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .pulse-line {
+    animation: none;
+  }
+}
 /* ===== De site ontspoort =====
    --derail loopt van 0 naar 1 terwijl je door een post scrollt (zie derail.js). */
 :root {
