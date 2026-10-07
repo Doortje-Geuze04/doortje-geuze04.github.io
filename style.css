@@ -1,0 +1,195 @@
+/* ANIMA devlog
+   Kalm, klinisch kleurenpalet (de "veilige" oefenkamer) met één alarmkleur
+   voor het moment dat het misgaat. */
+:root {
+  --bg: #E4EAED;       /* klinisch blauwgrijs */
+  --paper: #F3F6F7;
+  --ink: #1D2C37;      /* diep leisteen */
+  --muted: #5A6974;
+  --calm: #5F8F82;     /* salie: alles onder controle */
+  --alarm: #C3343F;    /* de mentor ontspoort */
+  --line: #C9D3D8;
+
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --measure: 66ch;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 1.0625rem/1.6 var(--body);
+}
+
+main, .site-header, .site-footer {
+  width: min(100% - 2.5rem, 52rem);
+  margin-inline: auto;
+}
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--alarm); }
+:focus-visible { outline: 3px solid var(--alarm); outline-offset: 3px; border-radius: 2px; }
+
+/* Header en footer */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.site-title { font-family: var(--display); font-weight: 700; text-decoration: none; }
+.site-author { color: var(--muted); font-size: 0.9375rem; }
+
+.site-footer {
+  margin-top: 5rem;
+  padding-block: 2rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Koppen */
+h1, h2, h3 {
+  font-family: var(--display);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+
+/* Homepagina */
+.hero { padding-top: clamp(2.5rem, 8vw, 5rem); }
+.hero h1 {
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.03em;
+}
+.intro { max-width: 34rem; font-size: 1.1875rem; margin: 0; }
+
+.pulse { margin: 3rem 0 0; }
+.pulse svg { width: 100%; height: auto; overflow: visible; }
+.pulse-line {
+  fill: none;
+  stroke: url(#pulse-grad);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw 2.4s ease-out both;
+}
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+.beat circle { fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
+.beat text { font: 700 13px var(--body); fill: var(--ink); }
+a.beat:hover circle, a.beat:focus-visible circle { fill: var(--alarm); stroke: var(--alarm); }
+a.beat:hover text { fill: var(--alarm); }
+.beat.pending circle { stroke: var(--line); }
+.beat.pending text { fill: var(--muted); font-weight: 400; }
+.pulse figcaption { color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem; }
+
+.sprint-list { margin-top: 4rem; }
+.sprint-list h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+.sprint-list ol { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+.sprint-list li a {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.25rem 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+.sprint-list .num { color: var(--muted); grid-row: span 2; }
+.sprint-list .t { font-family: var(--display); font-weight: 700; font-size: 1.25rem; }
+.sprint-list .s { color: var(--muted); }
+.sprint-list li a:hover .t { color: var(--alarm); }
+
+/* Post */
+.post-header { padding-top: clamp(2rem, 6vw, 4rem); max-width: var(--measure); }
+.post-sprint { color: var(--muted); margin: 0 0 0.5rem; }
+.post-header h1 { font-size: clamp(2.25rem, 6vw, 3.5rem); margin: 0 0 1rem; letter-spacing: -0.02em; }
+.post-summary { font-size: 1.1875rem; margin: 0; }
+
+.lu-tags { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.lu-tags li {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border: 1.5px solid var(--calm);
+  border-radius: 999px;
+  color: var(--calm);
+}
+
+.post-body { max-width: var(--measure); margin-top: 2.5rem; }
+.post-body h2 {
+  font-size: 1.5rem;
+  margin: 3rem 0 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--ink);
+}
+.post-body h3 { font-size: 1.1875rem; margin: 2rem 0 0.5rem; }
+.post-body p, .post-body ul, .post-body ol { margin: 0 0 1rem; }
+
+/* Beelden mogen breder dan de tekst */
+.post-body img, .post-body video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  background: var(--paper);
+}
+.post-body figure { margin: 2rem 0; }
+@media (min-width: 60rem) {
+  .post-body figure.wide { margin-inline: -4rem; }
+}
+.post-body figcaption { color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem; }
+
+.post-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--calm);
+  font-style: italic;
+}
+
+/* Vast blok voor AI-gebruik */
+.ai {
+  margin: 3rem 0 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--alarm);
+  border-radius: 4px;
+  font-size: 0.9375rem;
+}
+.ai h2 { border: 0; padding: 0; margin: 0 0 0.75rem; font-size: 1.125rem; }
+.ai p:last-child, .ai ul:last-child { margin-bottom: 0; }
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  max-width: var(--measure);
+}
+.post-nav .next { margin-left: auto; }
+
+code {
+  font-size: 0.9em;
+  background: var(--paper);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+pre { background: var(--ink); color: var(--paper); padding: 1rem; border-radius: 4px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-line { animation: none; }
+}
