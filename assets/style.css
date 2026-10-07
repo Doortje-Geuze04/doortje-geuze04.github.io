@@ -487,3 +487,26 @@ pre code {
     animation: none;
   }
 }
+
+/* Zwevende glitch-blokjes (achter de tekst) */
+.glitch-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.glitch-field span {
+  position: absolute;
+  bottom: -20px;
+  background: var(--alarm);
+}
+.glitch-field span.calm {
+  background: var(--calm);
+}
+.post-page .site-header,
+.post-page main,
+.post-page .site-footer {
+  position: relative;
+  z-index: 1;
+}
