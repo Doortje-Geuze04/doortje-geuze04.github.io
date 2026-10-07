@@ -510,3 +510,64 @@ pre code {
   position: relative;
   z-index: 1;
 }
+/* Glitchende afbeeldingen */
+.post-body figure,
+.post-body .sequence {
+  position: relative;
+}
+
+.img-strip {
+  position: absolute;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.img-strip.red {
+  filter: sepia(1) saturate(6) hue-rotate(-50deg);
+  mix-blend-mode: multiply;
+}
+.img-strip.cyan {
+  filter: sepia(1) saturate(4) hue-rotate(140deg);
+  mix-blend-mode: screen;
+}
+
+.img-glitch {
+  animation: img-glitch 0.5s steps(1, end);
+}
+@keyframes img-glitch {
+  0% {
+    transform: none;
+    filter: none;
+  }
+  10% {
+    transform: translate(-6px, 2px) skewX(-3deg);
+    filter: hue-rotate(-40deg) saturate(2.5) contrast(1.4);
+  }
+  25% {
+    transform: translate(8px, -2px);
+    filter: invert(1) hue-rotate(180deg);
+  }
+  35% {
+    transform: translate(-3px, 0);
+    filter: contrast(2) brightness(1.2);
+  }
+  55% {
+    transform: translate(4px, 1px) skewX(2deg);
+    filter: saturate(3) hue-rotate(20deg);
+  }
+  75% {
+    transform: translate(-1px, 0);
+    filter: none;
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-glitch {
+    animation: none;
+  }
+}

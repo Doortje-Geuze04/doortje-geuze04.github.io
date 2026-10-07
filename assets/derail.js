@@ -106,6 +106,88 @@
     if (Math.random() < derail * 0.9) spawnBlock();
   }, 160);
 
+  // Afbeeldingen glitchen: het beeld scheurt in stroken die opzij schieten
+  const images = Array.from(document.querySelectorAll(".post-body img"));
+
+  function glitchImage(img) {
+    if (reduceMotion || !enabled || img.classList.contains("img-glitch"))
+      return;
+    if (!img.complete || !img.offsetWidth) return;
+    const host = img.offsetParent;
+    if (!host) return;
+
+    img.classList.add("img-glitch");
+    img.addEventListener(
+      "animationend",
+      () => img.classList.remove("img-glitch"),
+      { once: true },
+    );
+
+    // 3 tot 6 stroken van het beeld die even verschuiven
+    const strips = 3 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < strips; i++) {
+      const clone = img.cloneNode();
+      clone.removeAttribute("alt");
+      clone.className = "img-strip";
+      clone.setAttribute("aria-hidden", "true");
+      const top = Math.random() * 85;
+      const height = 3 + Math.random() * 15;
+      Object.assign(clone.style, {
+        left: img.offsetLeft + "px",
+        top: img.offsetTop + "px",
+        width: img.offsetWidth + "px",
+        height: img.offsetHeight + "px",
+        clipPath: `inset(${top}% 0 ${Math.max(0, 100 - top - height)}% 0)`,
+      });
+      if (Math.random() < 0.5)
+        clone.classList.add(Math.random() < 0.5 ? "red" : "cyan");
+      host.appendChild(clone);
+
+      const shift = (Math.random() - 0.5) * 120;
+      clone.animate(
+        [
+          { transform: `translateX(${shift}px)`, opacity: 1 },
+          {
+            transform: `translateX(${-shift * 0.6}px)`,
+            opacity: 1,
+            offset: 0.4,
+          },
+          {
+            transform: `translateX(${shift * 0.3}px)`,
+            opacity: 1,
+            offset: 0.75,
+          },
+          { transform: "translateX(0)", opacity: 0 },
+        ],
+        { duration: 350 + Math.random() * 250, easing: "steps(4, end)" },
+      ).onfinish = () => clone.remove();
+    }
+  }
+
+  // Bij in beeld komen: kleinere kans dan bij de koppen
+  const imgObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && Math.random() < derail * 0.6)
+          glitchImage(entry.target);
+      });
+    },
+    { threshold: 0.5 },
+  );
+  images.forEach((img) => imgObserver.observe(img));
+
+  // Spontaan, maar minder vaak dan de koppen
+  setInterval(() => {
+    if (derail < 0.5) return;
+    const visible = images.filter((img) => {
+      const r = img.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0;
+    });
+    if (visible.length && Math.random() < derail * 0.5) {
+      glitchImage(visible[Math.floor(Math.random() * visible.length)]);
+    }
+  }, 3800);
+
   function setEnabled(on) {
     enabled = on;
     try {
