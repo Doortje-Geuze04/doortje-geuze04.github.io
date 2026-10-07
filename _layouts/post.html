@@ -11,6 +11,7 @@ layout: default
       {% for lu in page.leeruitkomsten %}<li>{{ lu }}</li>{% endfor %}
     </ul>
     {% endif %}
+    <button class="derail-toggle" type="button" aria-pressed="false">Laat de site met rust</button>
   </header>
 
   <div class="post-body">
@@ -30,3 +31,4 @@ layout: default
     {% endfor %}
   </nav>
 </article>
+<script src="{{ '/assets/derail.js' | relative_url }}" defer></script>

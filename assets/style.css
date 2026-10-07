@@ -362,3 +362,123 @@ pre code {
     grid-template-columns: 1fr;
   }
 }
+/* ===== De site ontspoort =====
+   --derail loopt van 0 naar 1 terwijl je door een post scrollt (zie derail.js). */
+:root {
+  --derail: 0;
+}
+
+.post-page {
+  background: color-mix(in srgb, var(--bg), #ebd5d6 calc(var(--derail) * 100%));
+}
+.post-page .post-body h2 {
+  border-top-color: color-mix(
+    in srgb,
+    var(--ink),
+    var(--alarm) calc(var(--derail) * 100%)
+  );
+}
+.post-page .lu-tags li,
+.post-page .post-body blockquote {
+  border-color: color-mix(
+    in srgb,
+    var(--calm),
+    var(--alarm) calc(var(--derail) * 100%)
+  );
+}
+.post-page .lu-tags li {
+  color: color-mix(
+    in srgb,
+    var(--calm),
+    var(--alarm) calc(var(--derail) * 100%)
+  );
+}
+
+/* Glitch op koppen */
+.glitch {
+  animation: glitch 0.45s steps(1, end);
+}
+@keyframes glitch {
+  0% {
+    transform: none;
+    text-shadow: none;
+    clip-path: none;
+  }
+  15% {
+    transform: translateX(-3px) skewX(-6deg);
+    text-shadow:
+      3px 0 var(--alarm),
+      -3px 0 var(--calm);
+    clip-path: inset(8% 0 45% 0);
+  }
+  35% {
+    transform: translateX(4px);
+    text-shadow:
+      -2px 0 var(--alarm),
+      2px 0 var(--calm);
+    clip-path: inset(55% 0 5% 0);
+  }
+  55% {
+    transform: translateX(-2px) skewX(4deg);
+    text-shadow: 2px 0 var(--alarm);
+    clip-path: inset(0 0 70% 0);
+  }
+  75% {
+    transform: translateX(1px);
+    text-shadow: -1px 0 var(--alarm);
+    clip-path: none;
+  }
+  100% {
+    transform: none;
+    text-shadow: none;
+    clip-path: none;
+  }
+}
+
+/* Helemaal onderaan: de beelden gaan licht trillen */
+.derailed .post-body img {
+  animation: shiver 6s infinite;
+}
+@keyframes shiver {
+  0%,
+  92%,
+  100% {
+    transform: none;
+    filter: none;
+  }
+  93% {
+    transform: translate(-2px, 1px);
+    filter: hue-rotate(-12deg) saturate(1.4);
+  }
+  95% {
+    transform: translate(2px, -1px);
+  }
+  97% {
+    transform: translate(-1px, 0);
+    filter: none;
+  }
+}
+
+/* Knop om het uit te zetten */
+.derail-toggle {
+  margin-top: 1.25rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+.derail-toggle:hover {
+  color: var(--alarm);
+  border-color: var(--alarm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch,
+  .derailed .post-body img {
+    animation: none;
+  }
+}
