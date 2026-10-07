@@ -1,0 +1,32 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="post-header">
+    <p class="post-sprint">Sprint {{ page.sprint }}{% if page.periode %}, {{ page.periode }}{% endif %}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="post-summary">{{ page.summary }}</p>{% endif %}
+    {% if page.leeruitkomsten %}
+    <ul class="lu-tags" aria-label="Leeruitkomsten in deze post">
+      {% for lu in page.leeruitkomsten %}<li>{{ lu }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+
+  {% assign sorted = site.posts | sort: "sprint" %}
+  <nav class="post-nav" aria-label="Andere sprints">
+    {% for p in sorted %}
+      {% if p.sprint == page.sprint %}
+        {% assign i = forloop.index0 %}
+        {% assign prev_i = i | minus: 1 %}
+        {% assign next_i = i | plus: 1 %}
+        {% if i > 0 %}{% assign prev = sorted[prev_i] %}<a class="prev" href="{{ prev.url | relative_url }}">Vorige: sprint {{ prev.sprint }}</a>{% endif %}
+        {% if sorted[next_i] %}{% assign next = sorted[next_i] %}<a class="next" href="{{ next.url | relative_url }}">Volgende: sprint {{ next.sprint }}</a>{% endif %}
+      {% endif %}
+    {% endfor %}
+  </nav>
+</article>
