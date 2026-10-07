@@ -1,0 +1,8 @@
+title: "ANIMA devlog"
+author: "Jouw naam"
+description: "Devlog van mijn semester in Studio Dark Tech (HvA, 2026/2027): het dark prototype voor ANIMA."
+lang: nl
+markdown: kramdown
+permalink: /:title/
+# Posts met een datum in de toekomst toch tonen
+future: true

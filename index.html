@@ -1,0 +1,63 @@
+---
+layout: default
+---
+<section class="hero">
+  <h1>{{ site.title }}</h1>
+  <p class="intro">
+    Kun je een LLM zo begrenzen dat hij veilig een jongere met sociale angst kan coachen?
+    Ons team onderzoekt het andersom: we bouwen een oefenkamer waarin de virtuele mentor ontspoort.
+    Hier houd ik per sprint bij wat ik maakte, wat misging en wat ik leerde.
+  </p>
+
+  {% assign beats = "134,58|314,46|494,32|672,14" | split: "|" %}
+  <figure class="pulse">
+    <svg viewBox="0 0 800 132" role="img" aria-labelledby="pulse-title">
+      <title id="pulse-title">Hartslaglijn met een piek per sprint</title>
+      <defs>
+        <linearGradient id="pulse-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="800" y2="0">
+          <stop offset="0" stop-color="var(--calm)"/>
+          <stop offset="0.55" stop-color="var(--calm)"/>
+          <stop offset="0.85" stop-color="var(--alarm)"/>
+        </linearGradient>
+      </defs>
+      <path class="pulse-line" pathLength="1" d="M0 80 L110 80 L118 76 L124 80 L128 86 L134 58 L140 90 L146 80 L160 76 L170 80
+        L290 80 L298 75 L304 80 L308 88 L314 46 L320 94 L326 80 L340 75 L350 80
+        L470 80 L478 74 L484 80 L488 90 L494 32 L500 98 L506 80 L520 74 L530 80
+        L640 80 L648 70 L654 84 L660 66 L666 92 L672 14 L678 104 L684 40 L690 100 L696 80 L710 72 L720 86 L730 78 L800 80"/>
+      {% for b in beats %}
+        {% assign n = forloop.index %}
+        {% assign xy = b | split: "," %}
+        {% assign found = nil %}
+        {% for post in site.posts %}{% if post.sprint == n %}{% assign found = post %}{% endif %}{% endfor %}
+        {% if found %}
+          <a class="beat" href="{{ found.url | relative_url }}">
+            <circle cx="{{ xy[0] }}" cy="{{ xy[1] }}" r="6"/>
+            <text x="{{ xy[0] }}" y="126" text-anchor="middle">Sprint {{ n }}</text>
+          </a>
+        {% else %}
+          <g class="beat pending">
+            <circle cx="{{ xy[0] }}" cy="{{ xy[1] }}" r="5"/>
+            <text x="{{ xy[0] }}" y="126" text-anchor="middle">Sprint {{ n }}</text>
+          </g>
+        {% endif %}
+      {% endfor %}
+    </svg>
+    <figcaption>Elke piek is een sprint. Grijze pieken komen later.</figcaption>
+  </figure>
+</section>
+
+<section class="sprint-list" aria-labelledby="alle-sprints">
+  <h2 id="alle-sprints">Alle sprints</h2>
+  <ol>
+    {% assign sorted = site.posts | sort: "sprint" %}
+    {% for post in sorted %}
+      <li>
+        <a href="{{ post.url | relative_url }}">
+          <span class="num">Sprint {{ post.sprint }}</span>
+          <span class="t">{{ post.title }}</span>
+          {% if post.summary %}<span class="s">{{ post.summary }}</span>{% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
