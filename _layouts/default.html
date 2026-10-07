@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+  {% if page.layout == "post" %}<link rel="stylesheet" href="{{ '/assets/derail.css' | relative_url }}">{% endif %}
 </head>
 <body{% if page.layout == "post" %} class="post-page"{% endif %}>
   <header class="site-header">

@@ -1,0 +1,200 @@
+/* ==========================================================================
+   De site ontspoort
+   --derail loopt van 0 (rustig) naar 1 (ontspoord) terwijl je door een post
+   scrollt. Zie assets/derail.js. Kleuren worden gemengd met color-mix():
+   hoe hoger --derail, hoe meer van de alarmkleur.
+   ========================================================================== */
+
+:root {
+  --derail: 0;
+  --derail-pct: calc(var(--derail) * 100%);
+  --derail-bg: #ebd5d6;
+}
+
+/* Kleuren die meeschuiven
+   ========================================================================== */
+
+.post-page {
+  background: color-mix(in srgb, var(--bg), var(--derail-bg) var(--derail-pct));
+}
+
+.post-page .post-body h2 {
+  border-top-color: color-mix(
+    in srgb,
+    var(--ink),
+    var(--alarm) var(--derail-pct)
+  );
+}
+
+.post-page .lu-tags li,
+.post-page .post-body blockquote {
+  border-color: color-mix(in srgb, var(--calm), var(--alarm) var(--derail-pct));
+}
+
+.post-page .lu-tags li {
+  color: color-mix(in srgb, var(--calm), var(--alarm) var(--derail-pct));
+}
+
+/* Effect 1: glitchende koppen
+   ========================================================================== */
+
+.glitch {
+  animation: glitch 0.45s steps(1, end);
+}
+
+@keyframes glitch {
+  0% {
+    transform: none;
+    text-shadow: none;
+    clip-path: none;
+  }
+  15% {
+    transform: translateX(-3px) skewX(-6deg);
+    text-shadow:
+      3px 0 var(--alarm),
+      -3px 0 var(--calm);
+    clip-path: inset(8% 0 45% 0);
+  }
+  35% {
+    transform: translateX(4px);
+    text-shadow:
+      -2px 0 var(--alarm),
+      2px 0 var(--calm);
+    clip-path: inset(55% 0 5% 0);
+  }
+  55% {
+    transform: translateX(-2px) skewX(4deg);
+    text-shadow: 2px 0 var(--alarm);
+    clip-path: inset(0 0 70% 0);
+  }
+  75% {
+    transform: translateX(1px);
+    text-shadow: -1px 0 var(--alarm);
+    clip-path: none;
+  }
+  100% {
+    transform: none;
+    text-shadow: none;
+    clip-path: none;
+  }
+}
+
+/* Effect 2: glitchende afbeeldingen
+   ========================================================================== */
+
+/* Nodig zodat de stroken precies over de afbeelding vallen */
+.post-body figure,
+.post-body .sequence {
+  position: relative;
+}
+
+.img-glitch {
+  animation: img-glitch 0.5s steps(1, end);
+}
+
+@keyframes img-glitch {
+  0% {
+    transform: none;
+    filter: none;
+  }
+  10% {
+    transform: translate(-6px, 2px) skewX(-3deg);
+    filter: hue-rotate(-40deg) saturate(2.5) contrast(1.4);
+  }
+  25% {
+    transform: translate(8px, -2px);
+    filter: invert(1) hue-rotate(180deg);
+  }
+  35% {
+    transform: translate(-3px, 0);
+    filter: contrast(2) brightness(1.2);
+  }
+  55% {
+    transform: translate(4px, 1px) skewX(2deg);
+    filter: saturate(3) hue-rotate(20deg);
+  }
+  75% {
+    transform: translate(-1px, 0);
+    filter: none;
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+
+.img-strip {
+  position: absolute;
+  z-index: 2;
+  max-width: none;
+  margin: 0;
+  pointer-events: none;
+}
+
+.img-strip.red {
+  filter: sepia(1) saturate(6) hue-rotate(-50deg);
+  mix-blend-mode: multiply;
+}
+.img-strip.cyan {
+  filter: sepia(1) saturate(4) hue-rotate(140deg);
+  mix-blend-mode: screen;
+}
+
+/* Effect 3: zwevende glitch-blokjes (achter de content)
+   ========================================================================== */
+
+.glitch-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glitch-field span {
+  position: absolute;
+  bottom: -20px;
+  background: var(--alarm);
+}
+
+.glitch-field span.calm {
+  background: var(--calm);
+}
+
+/* Content boven de blokjes houden */
+.post-page .site-header,
+.post-page main,
+.post-page .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Aan/uit-knop
+   ========================================================================== */
+
+.derail-toggle {
+  margin-top: 1.25rem;
+  padding: 0.3rem 0.8rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.derail-toggle:hover {
+  color: var(--alarm);
+  border-color: var(--alarm);
+}
+
+/* Minder beweging: alleen de kleuren schuiven nog mee
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch,
+  .img-glitch {
+    animation: none;
+  }
+}
