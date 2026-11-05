@@ -1,6 +1,6 @@
 ---
 layout: post
-sprint: 1
+sprint: 1 v2
 periode: "21 sep – 9 okt"
 title: "Van debrief naar oefenkamer"
 summary: "Een gesprek met de opdrachtgever, vijf losse concepten en één oefenkamer op papier."
