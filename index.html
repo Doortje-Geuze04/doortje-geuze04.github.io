@@ -49,7 +49,7 @@ layout: default
 <section class="sprint-list" aria-labelledby="alle-sprints">
   <h2 id="alle-sprints">Alle sprints</h2>
   <ol>
-    {% assign sorted = site.posts | sort: "sprint" %}
+    {% assign sorted = site.posts | reverse %}
     {% for post in sorted %}
       <li>
         <a href="{{ post.url | relative_url }}">

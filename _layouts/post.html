@@ -18,10 +18,10 @@ layout: default
     {{ content }}
   </div>
 
-  {% assign sorted = site.posts | sort: "sprint" %}
+  {% assign sorted = site.posts | reverse %}
   <nav class="post-nav" aria-label="Andere sprints">
     {% for p in sorted %}
-      {% if p.sprint == page.sprint %}
+      {% if p.url == page.url %}
         {% assign i = forloop.index0 %}
         {% assign prev_i = i | minus: 1 %}
         {% assign next_i = i | plus: 1 %}
