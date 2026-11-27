@@ -189,6 +189,31 @@
   border-color: var(--alarm);
 }
 
+.cat-toggle {
+  margin-left: 0.5rem;
+}
+
+/* Meme-katten (zie assets/cats.js), boven de content maar niet klikbaar
+   ========================================================================== */
+
+.cat-field {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cat-field img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  margin: 0;
+  border-radius: 8px;
+  will-change: transform;
+}
+
 /* Minder beweging: alleen de kleuren schuiven nog mee
    ========================================================================== */
 
