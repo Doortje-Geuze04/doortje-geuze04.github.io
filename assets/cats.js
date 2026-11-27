@@ -20,8 +20,11 @@
       "https://cataas.com/cat/cute?width=220",
     ],
     poolSize: 14, // aantal verschillende katten dat vooraf wordt geladen
-    minCats: 1, // katten tegelijk bovenaan de post
-    maxCats: 22, // katten tegelijk onderaan de post
+    // Zelfde punten als in derail.js, zodat de katten komen als de achtergrond rood wordt
+    calmUntil: 0.15, // tot hier nog geen katten
+    fullyDerailedAt: 0.9, // vanaf hier het maximum aantal katten
+    minCats: 2, // katten tegelijk zodra de achtergrond rood begint te worden
+    maxCats: 22, // katten tegelijk als de site volledig ontspoord is
     interval: 450, // ms tussen pogingen om een kat te laten vliegen
     size: [70, 170], // breedte van een kat in px (min, max)
     duration: [5000, 11000], // hoe lang een vlucht duurt in ms (min, max)
@@ -69,10 +72,20 @@
   });
   document.body.appendChild(field);
 
-  // 0 bovenaan de post, 1 onderaan
-  function scrollProgress() {
+  // Vooraf laden, zodat een kat meteen zichtbaar is als hij gaat vliegen
+  let preloaded = false;
+  function preload() {
+    if (preloaded) return;
+    preloaded = true;
+    pool.forEach((src) => (new Image().src = src));
+  }
+
+  // Zelfde berekening als derail.js: 0 tot calmUntil, daarna oplopend naar 1
+  function catLevel() {
     const scrollable = root.scrollHeight - window.innerHeight;
-    return scrollable > 0 ? Math.min(1, window.scrollY / scrollable) : 0;
+    const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+    const range = CONFIG.fullyDerailedAt - CONFIG.calmUntil;
+    return Math.min(1, Math.max(0, (progress - CONFIG.calmUntil) / range));
   }
 
   // ---------------------------------------------------------------------------
@@ -118,8 +131,9 @@
 
   setInterval(() => {
     if (!enabled || reduceMotion || document.hidden) return;
-    const wanted =
-      CONFIG.minCats + (CONFIG.maxCats - CONFIG.minCats) * scrollProgress();
+    const level = catLevel();
+    if (level <= 0) return;
+    const wanted = CONFIG.minCats + (CONFIG.maxCats - CONFIG.minCats) * level;
     if (field.childElementCount < Math.round(wanted)) launchCat();
   }, CONFIG.interval);
 
@@ -138,7 +152,8 @@
       toggle.textContent = on ? "Vang de katten" : "Laat de katten los";
       toggle.setAttribute("aria-pressed", String(on));
     }
-    if (!on) field.replaceChildren();
+    if (on) preload();
+    else field.replaceChildren();
   }
 
   if (toggle) toggle.addEventListener("click", () => setEnabled(!enabled));
