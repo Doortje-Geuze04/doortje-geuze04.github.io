@@ -55,9 +55,18 @@
     return src + (src.includes("?") ? "&" : "?") + "i=" + i;
   });
 
+  // De stijl staat hier en niet in de CSS: zonder position: fixed belanden de
+  // katten onderaan de pagina en wordt de pagina eindeloos lang.
   const field = document.createElement("div");
   field.className = "cat-field";
   field.setAttribute("aria-hidden", "true");
+  Object.assign(field.style, {
+    position: "fixed",
+    inset: "0",
+    zIndex: "3",
+    overflow: "hidden",
+    pointerEvents: "none",
+  });
   document.body.appendChild(field);
 
   // 0 bovenaan de post, 1 onderaan
@@ -74,7 +83,15 @@
     cat.src = pick(pool);
     cat.alt = "";
     const width = random(...CONFIG.size);
-    cat.style.width = width + "px";
+    Object.assign(cat.style, {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: width + "px",
+      maxWidth: "none",
+      margin: "0",
+      borderRadius: "8px",
+    });
     field.appendChild(cat);
 
     const w = window.innerWidth;
